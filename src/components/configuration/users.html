@@ -36,7 +36,7 @@
   <div *ngSwitchCase="State.Create">
     Create
 
-    <user-editor
+    <user-editor #editor
       [user]="currentUser"
       (submit)="onFinishCreate($event)"
       (cancel)="onCancel()">
@@ -45,7 +45,7 @@
   <div *ngSwitchCase="State.Edit">
     Editing {{currentUser.firstname}} {{currentUser.lastname}}
 
-    <user-editor
+    <user-editor #editor
       [user]="currentUser"
       (submit)="onFinishEdit($event)"
       (cancel)="onCancel()">

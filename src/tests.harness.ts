@@ -2,6 +2,7 @@ import {
   getTestBed,
   ComponentFixtureAutoDetect,
   TestBed,
+  flushMicrotasks,
 } from '@angular/core/testing';
 
 import {

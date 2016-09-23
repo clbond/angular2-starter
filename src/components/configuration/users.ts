@@ -39,10 +39,10 @@ export class ConfigurationUsers {
     });
   }
 
-  private onCreate() {
+  private onCreate(templateUser?: User) {
     this.state = State.Create;
 
-    this.currentUser = {
+    this.currentUser = templateUser || {
       id: null,
       firstname: null,
       lastname: null,

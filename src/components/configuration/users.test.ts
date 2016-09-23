@@ -1,12 +1,17 @@
 import {
   async,
+  fakeAsync,
   inject,
+  tick,
+  flushMicrotasks,
   TestBed,
 } from '@angular/core/testing';
 
 import {Subject, Observable} from 'rxjs';
 
-import {configureTests} from '../../tests.configure';
+import {
+  configureTests,
+} from '../../tests.harness';
 
 import {ConfigurationUsers, State} from './users';
 import {User, UserService} from '../../services';
@@ -26,8 +31,12 @@ describe('Users list', () => {
       ]]);
     }
 
+    public createUser: User;
+
     create(user: User): Observable<User> {
-      throw new Error();
+      this.createUser = user;
+
+      return Observable.from([user]);
     }
 
     edit(user: User): Observable<User> {
@@ -88,6 +97,34 @@ describe('Users list', () => {
         editButton.click();
 
         expect(fixture.componentInstance.state).toBe(State.Edit);
+      });
+    })));
+
+  it('should be able to fill in Create form and create a new user',
+    fakeAsync(inject([], () => {
+      fixture.whenStable().then(() => {
+        const {nativeElement} = fixture.debugElement;
+
+        fixture.componentInstance.onCreate({
+          id: null,
+          firstname: 'Chris',
+          lastname: 'Bond'
+        });
+
+        fixture.detectChanges();
+
+        const acceptButton = nativeElement.querySelector('[qa-id="accept"]');
+        expect(acceptButton).not.toBeNull();
+
+        acceptButton.click();
+
+        tick();
+        flushMicrotasks();
+
+        expect(mockService.createUser).not.toBeNull();
+        expect(mockService.createUser.id).toBeNull();
+        expect(mockService.createUser.firstname).toBe('Chris');
+        expect(mockService.createUser.lastname).toBe('Bond');
       });
     })));
 });
