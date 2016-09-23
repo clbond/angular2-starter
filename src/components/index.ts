@@ -1,1 +1,1 @@
-// Put shared, general purpose components here.
+export * from './configuration';

@@ -20,6 +20,11 @@ import {
   MonitoringComponent,
 } from '../pages';
 
+import {
+  ConfigurationGroups,
+  ConfigurationUsers,
+} from '../components';
+
 import {BrowserModule} from '@angular/platform-browser';
 
 @Component({
@@ -41,6 +46,8 @@ export class RioAppComponent {};
     RioHelloPageComponent,
     ConfigurationComponent,
     MonitoringComponent,
+    ConfigurationGroups,
+    ConfigurationUsers,
   ],
   providers: [
     appRoutingProviders,
