@@ -6,9 +6,9 @@ import {Observable} from 'rxjs';
 import {ConfigurationService} from './configuration';
 
 export interface User {
-  id?: number;
-  firstname?: string;
-  lastname?: string;
+  id: number;
+  firstname: string;
+  lastname: string;
 }
 
 @Injectable()
@@ -23,13 +23,11 @@ export class UserService {
   }
 
   call<T>(httpMethod: Function, ...args): Observable<T> {
-    const httpArguments  = [this.peopleUri, ...args, {
+    const httpArguments = [this.peopleUri, ...args, {
       headers: new Headers({
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       })}];
-
-      debugger;
 
     const observable =
       httpMethod.bind(this.http).apply(this.http, httpArguments);

@@ -25,9 +25,14 @@ export class ConfigurationUsers {
 
   constructor(
     private changeDetector: ChangeDetectorRef,
-    private service: UserService) {}
+    private service: UserService
+  ) {}
 
   private ngOnInit() {
+    this.requestUsers();
+  }
+
+  private requestUsers() {
     this.users = this.service.list();
 
     this.users.subscribe(() => {
@@ -38,7 +43,11 @@ export class ConfigurationUsers {
   private onCreate() {
     this.state = State.Create;
 
-    this.currentUser = {};
+    this.currentUser = {
+      id: null,
+      firstname: null,
+      lastname: null,
+    };
   }
 
   private onEdit(user: User) {
@@ -51,7 +60,7 @@ export class ConfigurationUsers {
     this.service.create(user)
       .subscribe(
         value => {
-          this.users.push(value);
+          this.requestUsers();
 
           this.state = State.View;
         },
@@ -64,12 +73,7 @@ export class ConfigurationUsers {
     this.service.edit(user)
       .subscribe(
         value => {
-          const existingUser = this.users.find(u => u.id === user.id);
-          if (existingUser == null) {
-            throw new Error(`Cannot find existing user with ID ${user.id}`);
-          }
-
-          Object.assign(existingUser, value);
+          this.requestUsers();
 
           this.state = State.View;
         },
