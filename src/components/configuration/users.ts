@@ -21,7 +21,7 @@ export class ConfigurationUsers {
 
   private currentUser: User;
 
-  private users: Observable<Array<User>>;
+  private users: Array<User>;
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -33,9 +33,8 @@ export class ConfigurationUsers {
   }
 
   private requestUsers() {
-    this.users = this.service.list();
-
-    this.users.subscribe(() => {
+    this.service.list().subscribe(users => {
+      this.users = users;
       this.changeDetector.detectChanges();
     });
   }
