@@ -5,6 +5,11 @@ import {
 } from '@angular/core';
 
 import {
+  LocationStrategy,
+  HashLocationStrategy,
+} from '@angular/common';
+
+import {
   routing,
   appRoutingProviders
 } from '../routes/app.routes';
@@ -37,7 +42,10 @@ export class RioAppComponent {};
     ConfigurationComponent,
     MonitoringComponent,
   ],
-  providers: [appRoutingProviders],
+  providers: [
+    appRoutingProviders,
+    //{provide: LocationStrategy, useClass: HashLocationStrategy},
+  ],
   bootstrap: [RioAppComponent]
 })
 export class RioAppModule {};
