@@ -10,13 +10,6 @@ exports.angular = { // ships in ES6 format now
   },
 };
 
-exports.tslint = {
-  enforce: 'pre',
-  test: /\.ts$/,
-  loader: 'tslint',
-  exclude: /node_modules/,
-};
-
 exports.ts = {
   test: /\.ts$/,
   loader: 'awesome-typescript-loader',

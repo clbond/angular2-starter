@@ -48,7 +48,6 @@ module.exports = {
   module: {
     rules: [
       loaders.angular,
-      loaders.tslint,
       loaders.ts,
       loaders.html,
       loaders.css,

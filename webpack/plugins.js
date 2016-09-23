@@ -2,7 +2,6 @@
 
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const StyleLintPlugin = require('stylelint-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const postcss = require('./postcss');
@@ -37,13 +36,7 @@ const basePlugins = [
     /angular\/core\/(esm\/src|src)\/linker/, __dirname),
 ].concat(sourceMap);
 
-const devPlugins = [
-  new StyleLintPlugin({
-    configFile: './.stylelintrc',
-    files: ['src/**/*.css'],
-    failOnError: false,
-  }),
-];
+const devPlugins = [];
 
 const prodPlugins = [
   new webpack.optimize.CommonsChunkPlugin({

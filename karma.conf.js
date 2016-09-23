@@ -101,7 +101,6 @@ function combinedLoaders() {
   return Object.keys(loaders).reduce(function reduce(aggregate, k) {
     switch (k) {
     case 'istanbulInstrumenter':
-    case 'tslint':
       return aggregate;
     case 'ts':
       return aggregate.concat([ // force inline source maps
