@@ -21,15 +21,16 @@ export class ConfigurationUsers {
 
   private currentUser: User;
 
-  private users: Array<User>;
+  private users: Observable<Array<User>>;
 
   constructor(
     private changeDetector: ChangeDetectorRef,
     private service: UserService) {}
 
   private ngOnInit() {
-    this.service.list().subscribe(users => {
-      this.users = users;
+    this.users = this.service.list();
+
+    this.users.subscribe(() => {
       this.changeDetector.detectChanges();
     });
   }
