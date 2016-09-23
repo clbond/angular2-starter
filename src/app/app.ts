@@ -9,7 +9,12 @@ import {
   appRoutingProviders
 } from '../routes/app.routes';
 
-import {RioHelloPageComponent} from '../pages';
+import {
+  RioHelloPageComponent,
+  ConfigurationComponent,
+  MonitoringComponent,
+} from '../pages';
+
 import {BrowserModule} from '@angular/platform-browser';
 
 @Component({
@@ -28,7 +33,9 @@ export class RioAppComponent {};
   ],
   declarations: [
     RioAppComponent,
-    RioHelloPageComponent
+    RioHelloPageComponent,
+    ConfigurationComponent,
+    MonitoringComponent,
   ],
   providers: [appRoutingProviders],
   bootstrap: [RioAppComponent]
