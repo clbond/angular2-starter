@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  template: '<p>Hello World</p>'
+  template: `
+    <hello-child></hello-child>
+  `
 })
 export class RioHelloPageComponent {}

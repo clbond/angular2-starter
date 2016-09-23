@@ -1,4 +1,6 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
+
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'configuration-groups',
@@ -6,4 +8,5 @@ import {Component} from '@angular/core';
     Groups
   `
 })
-export class ConfigurationGroups {}
+export class ConfigurationGroups {
+}

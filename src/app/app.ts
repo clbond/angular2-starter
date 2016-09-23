@@ -18,6 +18,7 @@ import {
   RioHelloPageComponent,
   ConfigurationComponent,
   MonitoringComponent,
+  HelloChildComponent,
 } from '../pages';
 
 import {
@@ -48,6 +49,7 @@ export class RioAppComponent {};
     MonitoringComponent,
     ConfigurationGroups,
     ConfigurationUsers,
+    HelloChildComponent,
   ],
   providers: [
     appRoutingProviders,
