@@ -9,6 +9,8 @@ import {
   HashLocationStrategy,
 } from '@angular/common';
 
+import {HttpModule} from '@angular/http';
+
 import {
   routing,
   appRoutingProviders
@@ -26,19 +28,28 @@ import {
   ConfigurationUsers,
 } from '../components';
 
+import {
+  ConfigurationService,
+  UserService
+} from '../services';
+
 import {BrowserModule} from '@angular/platform-browser';
 
 @Component({
   selector: 'rio-app',
   // Global styles imported in the app component.
   encapsulation: ViewEncapsulation.None,
-  styles: [ require('../styles/index.css') ],
+  styles: [
+    require('../styles/index.css'),
+    require('./app.css'),
+  ],
   template: require('./app.html'),
 })
 export class RioAppComponent {};
 
 @NgModule({
   imports: [
+    HttpModule,
     BrowserModule,
     routing
   ],
@@ -53,7 +64,8 @@ export class RioAppComponent {};
   ],
   providers: [
     appRoutingProviders,
-    //{provide: LocationStrategy, useClass: HashLocationStrategy},
+    UserService,
+    ConfigurationService,
   ],
   bootstrap: [RioAppComponent]
 })
