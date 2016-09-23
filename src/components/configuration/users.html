@@ -1,22 +1,44 @@
-<table>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>First Name</th>
-      <th>Last Name</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let user of (users | async)">
-      <td>
-        {{user.id}}
-      </td>
-      <td>
-        {{user.firstname}}
-      </td>
-      <td>
-        {{user.lastname}}
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div [ngSwitch]="state">
+  <div *ngSwitchCase="State.View">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>
+            <button type="button" (click)="onCreate()">Create</button>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{user.id}}</td>
+          <td>{{user.firstname}}</td>
+          <td>{{user.lastname}}</td>
+          <td>
+            <button type="button" (click)="onEdit(user)">Edit</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngSwitchCase="State.Create">
+    Create
+
+    <user-editor
+      [user]="currentUser"
+      (submit)="onFinishCreate($event)"
+      (cancel)="onCancel()">
+    </user-editor>
+  </div>
+  <div *ngSwitchCase="State.Edit">
+    Editing {{currentUser.firstname}} {{currentUser.lastname}}
+
+    <user-editor
+      [user]="currentUser"
+      (submit)="onFinishEdit($event)"
+      (cancel)="onCancel()">
+    </user-editor>
+  </div>
+</div>

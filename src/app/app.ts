@@ -12,6 +12,11 @@ import {
 import {HttpModule} from '@angular/http';
 
 import {
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+
+import {
   routing,
   appRoutingProviders
 } from '../routes/app.routes';
@@ -26,6 +31,7 @@ import {
 import {
   ConfigurationGroups,
   ConfigurationUsers,
+  UserEditor,
 } from '../components';
 
 import {
@@ -50,6 +56,8 @@ export class RioAppComponent {};
 @NgModule({
   imports: [
     HttpModule,
+    FormsModule,
+    ReactiveFormsModule,
     BrowserModule,
     routing
   ],
@@ -61,6 +69,7 @@ export class RioAppComponent {};
     ConfigurationGroups,
     ConfigurationUsers,
     HelloChildComponent,
+    UserEditor,
   ],
   providers: [
     appRoutingProviders,

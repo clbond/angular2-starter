@@ -6,9 +6,9 @@ import {Observable} from 'rxjs';
 import {ConfigurationService} from './configuration';
 
 export interface User {
-  id: number;
-  firstname: string;
-  lastname: string;
+  id?: number;
+  firstname?: string;
+  lastname?: string;
 }
 
 @Injectable()
@@ -18,13 +18,34 @@ export class UserService {
     private http: Http
   ) {}
 
+  private get peopleUri(): string {
+    return this.configurationService.getServiceLocation('/people');
+  }
+
+  call<T>(httpMethod: Function, ...args): Observable<T> {
+    const httpArguments  = [this.peopleUri, ...args, {
+      headers: new Headers({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      })}];
+
+      debugger;
+
+    const observable =
+      httpMethod.bind(this.http).apply(this.http, httpArguments);
+
+    return observable.map(r => <T> r.json());
+  }
+
   list(): Observable<Array<User>> {
-    const uri = this.configurationService.getServiceLocation('/people');
+    return this.call<Array<User>>(this.http.get);
+  }
 
-    const observable = this.http.get(uri, {
-      headers: new Headers({'Accept': 'application/json'})
-    });
+  create(user: User): Observable<User> {
+    return this.call<User>(this.http.post, JSON.stringify(user));
+  }
 
-    return observable.map(r => <Array<User>> r.json());
+  edit(user: User): Observable<User> {
+    return this.call<User>(this.http.put, JSON.stringify(user));
   }
 }

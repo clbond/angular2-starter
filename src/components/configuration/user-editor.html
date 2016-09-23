@@ -1,0 +1,22 @@
+<div>
+  <form #form="ngForm">
+    <div>
+      <label for="first-name">First name</label>
+      <input id="first-name" name="firstname" [(ngModel)]="user.firstname" required />
+    </div>
+    <div>
+      <label for="last-name">Last name</label>
+      <input id="last-name" name="lastname" [(ngModel)]="user.lastname" required />
+    </div>
+    <div class="p2">
+      <button
+          type="button"
+          [disabled]="!form.valid"
+          class="inline-block m1"
+          (click)="submit.emit(user)">
+        OK
+      </button>
+      <button type="button" class="inline-block m1" (click)="cancel.emit()">Cancel</button>
+    </div>
+  </form>
+</div>
