@@ -16,8 +16,4 @@ export class UserEditor {
 
   @Output() private submit = new EventEmitter<User>();
   @Output() private cancel = new EventEmitter<void>();
-
-  private ngOnChanges() {
-    debugger;
-  }
 }

@@ -8,7 +8,7 @@ import {Subject, Observable} from 'rxjs';
 
 import {configureTests} from '../../tests.configure';
 
-import {ConfigurationUsers} from './users';
+import {ConfigurationUsers, State} from './users';
 import {User, UserService} from '../../services';
 import {RioAppModule} from '../../app/app';
 
@@ -29,6 +29,7 @@ describe('Users list', () => {
     create(user: User): Observable<User> {
       throw new Error();
     }
+
     edit(user: User): Observable<User> {
       throw new Error();
     }
@@ -62,14 +63,31 @@ describe('Users list', () => {
       expect(mockService.listCalled).toBe(true);
     })));
 
-  // it('should be able to create a new user',
-  //   async(inject([], () => {
-  //     fixture.whenStable().then(() => {
-  //     });
-  //   })));
+  it('should go into Create mode when the Create button is clicked',
+    async(inject([], () => {
+      fixture.whenStable().then(() => {
+        const {nativeElement} = fixture.debugElement;
 
-  // it('should be able to edit an existing user',
-  //   () => {
+        const createButton = nativeElement.querySelector('[qa-id="create"]');
+        expect(createButton).not.toBeNull();
 
-  //   });
+        createButton.click();
+
+        expect(fixture.componentInstance.state).toBe(State.Create);
+      });
+    })));
+
+  it('should go into Edit mode when the Edit button is clicked',
+    async(inject([], () => {
+      fixture.whenStable().then(() => {
+        const {nativeElement} = fixture.debugElement;
+
+        const editButton = nativeElement.querySelector('[qa-id="edit"]');
+        expect(editButton).not.toBeNull();
+
+        editButton.click();
+
+        expect(fixture.componentInstance.state).toBe(State.Edit);
+      });
+    })));
 });
