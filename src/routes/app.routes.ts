@@ -6,12 +6,28 @@ import {
   MonitoringComponent,
 } from '../pages';
 
+import {
+  ConfigurationGroups,
+  ConfigurationUsers
+} from '../components';
+
 const SAMPLE_APP_ROUTES: Routes = [{
   path: '',
   component: RioHelloPageComponent,
 }, {
   path: 'configuration',
   component: ConfigurationComponent,
+  children: [{
+      path: '',
+      redirectTo: 'groups',
+    }, {
+      path: 'groups',
+      component: ConfigurationGroups,
+    }, {
+      path: 'users',
+      component: ConfigurationUsers,
+    },
+  ],
 }, {
   path: 'monitoring',
   component: MonitoringComponent,
