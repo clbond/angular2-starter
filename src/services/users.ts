@@ -11,8 +11,16 @@ export interface User {
   lastname: string;
 }
 
+export interface UserServiceContract {
+  list(): Observable<Array<User>>;
+
+  create(user: User): Observable<User>;
+
+  edit(user: User): Observable<User>;
+}
+
 @Injectable()
-export class UserService {
+export class UserService implements UserServiceContract {
   constructor(
     private configurationService: ConfigurationService,
     private http: Http
