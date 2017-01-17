@@ -45,23 +45,6 @@ exports.html = {
   loader: 'raw-loader',
 };
 
-exports.localCss = {
-  test: /\.css$/,
-  include: path.resolve(process.cwd(), 'src', 'app'),
-  loader: 'to-string-loader!css-loader?-minimize!postcss-loader',
-  exclude: /node_modules/,
-};
-
-exports.globalCss = {
-  test: /\.css$/,
-  include: path.resolve(process.cwd(), 'src', 'styles'),
-  loader: ExtractTextPlugin.extract({
-    fallbackLoader: 'style-loader',
-    loader: 'css-loader?-minimize!postcss-loader',
-  }),
-  exclude: /node_modules/,
-};
-
 exports.svg = makeFileLoader(/\.svg$/);
 exports.eot = makeFileLoader(/\.eot$/);
 exports.woff = makeFileLoader(/\.woff$/);

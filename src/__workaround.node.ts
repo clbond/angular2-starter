@@ -14,8 +14,6 @@ if (!__core_private__['ViewUtils']) {
     __core_private__['ViewUtils'] = __core_private__['view_utils'];
 }
 
-
-console.warn('patch: ', __compiler__ && __compiler__.SelectorMatcher && __compiler__.CssSelector);
 if (__compiler__ && __compiler__.SelectorMatcher && __compiler__.CssSelector) {
     patch = true;
     (__compiler__).__compiler_private__ = {

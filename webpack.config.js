@@ -30,13 +30,37 @@ const baseConfig = {
       loaders.tslint,
       loaders.ts_JiT,
       loaders.html,
-      //loaders.globalCss,
-      //loaders.localCss,
       loaders.svg,
       loaders.eot,
       loaders.woff,
       loaders.woff2,
       loaders.ttf,
+      {
+        test: /\.css$/,
+        exclude: root('src', 'app'),
+        loader: ExtractTextPlugin.extract({
+          fallbackLoader: 'style-loader',
+          loader: 'css-loader?sourceMap-loader!postcss-loader',
+        })
+      },
+      {
+        test: /\.css$/,
+        include: root('src', 'app'),
+        loader: 'raw-loader!postcss-loader',
+      },
+      {
+        test: /\.scss$/,
+        exclude: root('src', 'app'),
+        loader: ExtractTextPlugin.extract({
+          fallbackLoader: 'style-loader',
+          loader: 'css-loader?sourceMap!postcss-loader!sass-loader',
+        }),
+      },
+      {
+        test: /\.scss$/,
+        exclude: root('src', 'style'),
+        loader: 'raw-loader!postcss-loader!sass-loader',
+      },
     ],
   },
 };
@@ -45,7 +69,6 @@ const clientConfig = {
   target: 'web',
   entry: {
     app: './src/client.ts',
-    // and vendor files separate
     vendor: [
       './src/vendor.ts',
     ],
@@ -68,7 +91,7 @@ const serverConfig = {
   entry: './src/server.ts',
   output: {
     filename: 'index.js',
-    path: path.join(__dirname, 'dist', 'server'),
+    path: './dist/server',
     libraryTarget: 'commonjs2'
   },
   externals: includeClientPackages(
@@ -90,12 +113,12 @@ const serverPlugins = [
     /angular(\\|\/)core(\\|\/)src(\\|\/)linker/,
     path.join(__dirname, 'src'),
     {}),
-  //new webpack.LoaderOptionsPlugin({
-  //  test: /\.css$/,
-  //  options: {
-  //    postcss,
-  //  },
-  //}),
+  new webpack.LoaderOptionsPlugin({
+   test: /\.css$/,
+   options: {
+     postcss,
+   },
+  }),
   new webpack.DefinePlugin({
     __DEV__: process.env.NODE_ENV !== 'production',
     __PRODUCTION__: process.env.NODE_ENV === 'production',
@@ -126,4 +149,9 @@ function includeClientPackages(packages, localModule) {
     }
     return cb();
   };
+}
+
+function root(args) {
+  args = Array.prototype.slice.call(arguments, 0);
+  return path.join.apply(path, [__dirname].concat(args));
 }
