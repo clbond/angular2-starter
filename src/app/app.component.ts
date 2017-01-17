@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import '../styles/index.css';
+//import '../styles/index.css';
 
 @Component({
   selector: 'rio-app',

@@ -44,11 +44,6 @@ const basePlugins = [
 ].concat(sourceMap);
 
 const devPlugins = [
-  new StyleLintPlugin({
-    configFile: './.stylelintrc',
-    files: ['src/**/*.css'],
-    failOnError: false,
-  }),
 ];
 
 const prodPlugins = [
@@ -56,15 +51,6 @@ const prodPlugins = [
     name: [
       'vendor',
     ],
-  }),
-  new webpack.optimize.UglifyJsPlugin({
-    sourceMap: true,
-    mangle: {
-      keep_fnames: true,
-    },
-    compress: {
-      warnings: false,
-    },
   }),
 ];
 
