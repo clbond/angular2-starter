@@ -6,9 +6,9 @@ import {
   isNode,
 } from 'angular2-universal/node';
 
-import { AppModule } from './app.module';
+import { AppModule } from './app/app.module';
 
-import { AppComponent } from './app.component';
+import { AppComponent } from './app/app.component';
 
 declare const Zone;
 

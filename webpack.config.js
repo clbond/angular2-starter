@@ -1,14 +1,30 @@
 'use strict';
 
 const path = require('path');
-const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const loaders = require('./webpack/loaders');
-const clientPlugins = require('./webpack/plugins');
-const postcss = require('./webpack/postcss');
-const ENV = process.env.npm_lifecycle_event;
+
+const {
+  ContextReplacementPlugin,
+  DefinePlugin,
+  LoaderOptionsPlugin,
+  NoErrorsPlugin,
+  SourceMapDevToolPlugin,
+  optimize: {CommonsChunkPlugin},
+} = require('webpack');
+
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const StyleLintPlugin = require('stylelint-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
+const { ForkCheckerPlugin } = require('awesome-typescript-loader');
+
 const isProduction = process.env.NODE_ENV === 'production';
+
+const { AotPlugin } = require('@ngtools/webpack');
+
+const loaders = require('./webpack/loaders');
+const postcss = require('./webpack/postcss');
 
 const baseConfig = {
   devtool: isProduction ?
@@ -109,28 +125,68 @@ const serverConfig = {
   },
 };
 
-const serverPlugins = [
-  new webpack.ContextReplacementPlugin(
+const basePlugins = [
+  new ContextReplacementPlugin(
     /angular(\\|\/)core(\\|\/)src(\\|\/)linker/,
     path.join(__dirname, 'src'),
     {}),
-  new webpack.LoaderOptionsPlugin({
+  new LoaderOptionsPlugin({
    test: /\.css$/,
    options: {
      postcss,
    },
   }),
-  new webpack.DefinePlugin({
+  new DefinePlugin({
     __DEV__: process.env.NODE_ENV !== 'production',
     __PRODUCTION__: process.env.NODE_ENV === 'production',
     __TEST__: JSON.stringify(process.env.TEST || false),
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
   }),
+  new HtmlWebpackPlugin({
+    chunksSortMode: 'dependency',
+    template: './src/index.html',
+    inject: 'body',
+    minify: false,
+  }),
   new ExtractTextPlugin('styles.[contenthash].css'),
+  new ForkCheckerPlugin(),
+  new NoErrorsPlugin(),
+  ...(process.env.TEST
+    ? [new SourceMapDevToolPlugin({ filename: null, test: /\.ts$/ })]
+    : []),
+];
+
+const serverPlugins = [...basePlugins];
+
+const baseClientPlugins = [
+  new CopyWebpackPlugin([
+    { from: 'src/assets', to: 'assets' },
+  ]),
+  ...basePlugins,
+];
+
+const devClientPlugins = [...baseClientPlugins];
+
+const productionClientPlugins = [
+  new CommonsChunkPlugin({
+    name: [
+      'vendor',
+    ],
+  }),
+  new AotPlugin({
+    tsConfigPath: './tsconfig.json',
+    mainPath: 'src/client.ts',
+    entryModule: 'client.module#ClientModule'
+  }),
+  ...baseClientPlugins,
 ];
 
 module.exports = [
-  webpackMerge({}, baseConfig, clientConfig, {plugins: clientPlugins}),
+  webpackMerge({}, baseConfig, clientConfig, {
+    plugins:
+      isProduction
+        ? productionClientPlugins
+        : devClientPlugins,
+  }),
   webpackMerge({}, baseConfig, serverConfig, {plugins: serverPlugins}),
 ];
-

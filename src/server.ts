@@ -12,7 +12,7 @@ import * as compression from 'compression';
 
 import { createEngine } from 'angular2-express-engine';
 
-import { ServerModule } from './app/server.module';
+import { ServerModule } from './server.module';
 
 //import { routes } from './server.routes';
 
