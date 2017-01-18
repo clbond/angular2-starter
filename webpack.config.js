@@ -28,39 +28,17 @@ const baseConfig = {
     rules: [
       loaders.angular,
       loaders.tslint,
-      loaders.ts_JiT,
+      loaders.tsjit,
       loaders.html,
       loaders.svg,
       loaders.eot,
       loaders.woff,
       loaders.woff2,
       loaders.ttf,
-      {
-        test: /\.css$/,
-        exclude: root('src', 'app'),
-        loader: ExtractTextPlugin.extract({
-          fallbackLoader: 'style-loader',
-          loader: 'css-loader?sourceMap-loader!postcss-loader',
-        })
-      },
-      {
-        test: /\.css$/,
-        include: root('src', 'app'),
-        loader: 'raw-loader!postcss-loader',
-      },
-      {
-        test: /\.scss$/,
-        exclude: root('src', 'app'),
-        loader: ExtractTextPlugin.extract({
-          fallbackLoader: 'style-loader',
-          loader: 'css-loader?sourceMap!postcss-loader!sass-loader',
-        }),
-      },
-      {
-        test: /\.scss$/,
-        exclude: root('src', 'style'),
-        loader: 'raw-loader!postcss-loader!sass-loader',
-      },
+      loaders.localCss,
+      loaders.globalCss,
+      loaders.localScss,
+      loaders.globalScss,
     ],
   },
 };
@@ -86,6 +64,20 @@ const clientConfig = {
   },
 };
 
+const matchPackages = (...packages) => {
+  return (context, request, cb) => {
+    if (packages.some(p => request.indexOf(p) >= 0)) {
+      return cb();
+    }
+    else if (!path.isAbsolute(request) && request.charAt(0) !== '.') {
+      return cb(null, `commonjs ${request}`);
+    }
+    else {
+      return cb();
+    }
+  };
+};
+
 const serverConfig = {
   target: 'node',
   entry: './src/server.ts',
@@ -94,8 +86,18 @@ const serverConfig = {
     path: './dist/server',
     libraryTarget: 'commonjs2'
   },
-  externals: includeClientPackages(
-    /@angularclass|@angular|angular2-|ng2-|ng-|@ng-|angular-|@ngrx|ngrx-|@angular2|ionic|@ionic|-angular2|-ng2|-ng/
+  externals: matchPackages(
+    '@angularclass',
+    '@angular',
+    'angular-',
+    'angular2',
+    '-ng2',
+    '-ng',
+    'ng2-',
+    'ng-',
+    '@ng-',
+    '@ngrx',
+    'ngrx-'
   ),
   node: {
     global: true,
@@ -104,12 +106,11 @@ const serverConfig = {
     __filename: true,
     process: true,
     Buffer: true
-  }
+  },
 };
 
 const serverPlugins = [
   new webpack.ContextReplacementPlugin(
-    // The (\\|\/) piece accounts for path separators in *nix and Windows
     /angular(\\|\/)core(\\|\/)src(\\|\/)linker/,
     path.join(__dirname, 'src'),
     {}),
@@ -125,7 +126,7 @@ const serverPlugins = [
     __TEST__: JSON.stringify(process.env.TEST || false),
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
   }),
-  //new ExtractTextPlugin('styles.[contenthash].css'),
+  new ExtractTextPlugin('styles.[contenthash].css'),
 ];
 
 module.exports = [
@@ -133,25 +134,3 @@ module.exports = [
   webpackMerge({}, baseConfig, serverConfig, {plugins: serverPlugins}),
 ];
 
-function includeClientPackages(packages, localModule) {
-  return function(context, request, cb) {
-    if (localModule instanceof RegExp && localModule.test(request)) {
-      return cb();
-    }
-    if (packages instanceof RegExp && packages.test(request)) {
-      return cb();
-    }
-    if (Array.isArray(packages) && packages.indexOf(request) !== -1) {
-      return cb();
-    }
-    if (!path.isAbsolute(request) && request.charAt(0) !== '.') {
-      return cb(null, 'commonjs ' + request);
-    }
-    return cb();
-  };
-}
-
-function root(args) {
-  args = Array.prototype.slice.call(arguments, 0);
-  return path.join.apply(path, [__dirname].concat(args));
-}

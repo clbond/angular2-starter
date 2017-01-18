@@ -25,7 +25,7 @@ exports.ts = {
   loader: '@ngtools/webpack',
 };
 
-exports.ts_JiT = {
+exports.tsjit = {
   test: /\.ts$/,
   loaders: [
     'awesome-typescript-loader',
@@ -43,6 +43,38 @@ exports.istanbulInstrumenter = {
 exports.html = {
   test: /\.html$/,
   loader: 'raw-loader',
+};
+
+const root = (...args) => path.resolve(path.join(__dirname, '..', ...args));
+
+exports.globalCss = {
+  test: /\.css$/,
+  exclude: root('src', 'app'),
+  loader: ExtractTextPlugin.extract({
+    fallbackLoader: 'style-loader',
+    loader: 'css-loader?sourceMap-loader!postcss-loader',
+  })
+};
+
+exports.localCss = {
+  test: /\.css$/,
+  include: root('src', 'app'),
+  loader: 'raw-loader!postcss-loader',
+};
+
+exports.globalScss = {
+  test: /\.scss$/,
+  exclude: root('src', 'style'),
+  loader: 'raw-loader!postcss-loader!sass-loader',
+};
+
+exports.localScss = {
+  test: /\.scss$/,
+  exclude: root('src', 'app'),
+  loader: ExtractTextPlugin.extract({
+    fallbackLoader: 'style-loader',
+    loader: 'css-loader?sourceMap!postcss-loader!sass-loader',
+  }),
 };
 
 exports.svg = makeFileLoader(/\.svg$/);

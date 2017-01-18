@@ -1,10 +1,14 @@
-import {NgModule} from '@angular/core';
+import { NgModule } from '@angular/core';
 
-import {UniversalModule, isBrowser, isNode} from 'angular2-universal/node';
+import {
+  UniversalModule,
+  isBrowser,
+  isNode,
+} from 'angular2-universal/node';
 
-import {AppModule} from './app.module';
+import { AppModule } from './app.module';
 
-import {AppComponent} from './app.component';
+import { AppComponent } from './app.component';
 
 declare const Zone;
 
@@ -21,12 +25,4 @@ declare const Zone;
   ],
   bootstrap: [AppComponent],
 })
-export class ServerModule {
-  universalDoDehydrate = () => {
-    debugger;
-  }
-
-  universalAfterDehydrate = () => {
-    debugger;
-  }
-}
+export class ServerModule { }

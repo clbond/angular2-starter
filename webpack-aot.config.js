@@ -26,6 +26,6 @@ webpackConfig.plugins = webpackConfig.plugins.concat([
   }),
 ]);
 if (!JiT) {
-  console.log('AoT: True');
+  console.log('Enabled ahead of time compilation (AoT)');
 }
 module.exports = webpackConfig;
